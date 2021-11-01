@@ -1,6 +1,7 @@
+//global variable declaration
 var score= 0;
 var bg, backgroundImg;
-
+//preload function is used to load all the game assets
 function preload() {
   backgroundImg = loadImage("images/bg.jpg");
   Ironmanimages = loadImage("images/iron.png");
@@ -11,24 +12,31 @@ function preload() {
 }
 
 function setup() {
+  //declaation of canvas size 
   createCanvas(1000, 600);
+  //create background sprite
   bg = createSprite(580,300);
  bg.addImage(backgroundImg);
  bg.scale =2;
  bg.velocityY = -10;
+ //create Ironman sprite
  Ironman = createSprite(100,500,40,40);
  Ironman.addImage(Ironmanimages);
  Ironman.scale = 0.3;
+ //create ground sprite
  ground = createSprite(200,585,400,10);
  ground.visible = false;
+ //create groups
  platformGroup = new Group();
  diamondGroup = new Group();
  spikesGroup = new Group();
 }
 
 function draw() {
+  //scroll background
   if (bg.y<200){
     bg.y=bg.width/4;}
+    //keyboard controls
   if (keyDown("up")) {
     Ironman.velocityY = -10;
   }
@@ -39,7 +47,9 @@ function draw() {
     Ironman.x = Ironman.x + 5;
   }
   Ironman.velocityY = Ironman.velocityY + 0.5;
+  //colliding Ironman with ground
   Ironman.collide(ground);
+  //call the function to generate stones
   generatePlatforms();
   for (var i = 0; i < platformGroup.length; i++){
     var temp = platformGroup.get(i);
@@ -48,20 +58,25 @@ function draw() {
     }
 
   }
+  //call the function to generate diamonds
   generatediamonds();
   for (var i = 0; i< diamondGroup.length; i ++){
     var temp = diamondGroup.get(i);
     if (temp.isTouching(Ironman)) {
+      //increase the score when the Ironman catches the diamonds
       score= score+1;
       temp.destroy();
     }
   }
+
+  //call the function to generate spikes
 
  
     generatespikes();
     for (var i = 0; i< spikesGroup.length; i ++){
       var temp = spikesGroup.get(i);
       if (temp.isTouching(Ironman)) {
+        //once Ironman touches the spikes decrease thw score by 5
         score= score-5;
         temp.destroy();
       }

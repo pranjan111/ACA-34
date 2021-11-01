@@ -1,4 +1,4 @@
-
+var score= 0;
 var bg, backgroundImg;
 
 function preload() {
@@ -52,30 +52,42 @@ function draw() {
   for (var i = 0; i< diamondGroup.length; i ++){
     var temp = diamondGroup.get(i);
     if (temp.isTouching(Ironman)) {
+      score= score+1;
       temp.destroy();
     }
   }
 
  
-    
+    generatespikes();
+    for (var i = 0; i< spikesGroup.length; i ++){
+      var temp = spikesGroup.get(i);
+      if (temp.isTouching(Ironman)) {
+        score= score-5;
+        temp.destroy();
+      }
+    }
     drawSprites();
-    
+    textSize(20);
+    fill("brown");
+    //display score
+    text("Diamonds Collected: "+ score, 500,50);
+}
     function generatespikes() {
       if (frameCount % 70 === 0) {
         var spikes = createSprite(1200,120,40,10);
-        spikes.y = random(50,450);
+        spikes.x = random(50,450);
         spikes.addImage(spikesImage);
         spikes.scale = 0.5;
-        spikes.velocityX = -5;
+        spikes.velocityY = 5;
         
         spikes.lifetime =250;
-        spikesGroup.add(spike);
+        spikesGroup.add(spikes);
       }
     }
-    generatespikes();
+   
     
    
-}
+
 function generatePlatforms() {
   if (frameCount % 60 === 0) {
     var brick = createSprite(1200, 10, 40, 10);
